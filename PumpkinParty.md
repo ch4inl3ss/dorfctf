@@ -15,7 +15,8 @@ type.
 
 We used this command to submit the form with one merchant ticket:
 
-    curl -i -H 'application/x-www-form-urlencoded' -F 'merchant_count=1' http://$HOSTIP/tickets.php?action=submit
+    curl -i -H 'application/x-www-form-urlencoded' \
+      -F 'merchant_count=1' http://$HOSTIP/tickets.php?action=submit
 
 The response is HTTP 302 that redirects to `?action=confirm` and has a
 `Set-Cookie` header with the key `PHPSESSID`. We save it for later use.
