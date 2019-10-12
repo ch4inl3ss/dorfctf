@@ -6,7 +6,7 @@ With `nmap $HOSTIP` we find out the host only listens on port 80.
 Open that IP in a Web browser. It presents a page with a link at the bottom.
 The link leads to a page for buying tickets, `/tickets.php`. It contains a form
 with form fields for the number of tickets for each ticket type, e.g.
-`normal\_count` or `vip\_count`.
+`normal_count` or `vip_count`.
 
 The page's source code contains a comment which says that there's a fourth
 ticket type 'merchant' which is not implemented yet. Since this type is not
@@ -82,4 +82,4 @@ The PHP file asks for a GET parameter `admin` that must have the value `sure`. S
 
     curl -u merch_test2:BUYMYSHORTS -vi http://10.10.1.3/merchants/327a6c4304ad5938eaf0efb6cc3e53dc.php?admin=sure
 
-The returned HTML page contains the flag: `DORF18{Y0UR\_5H3LL\_15\_1N\_4N0TH3R\_C45TL3}`.
+The returned HTML page contains the flag: `DORF18{Y0UR_5H3LL_15_1N_4N0TH3R_C45TL3}`.
