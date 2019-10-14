@@ -76,7 +76,7 @@ In order to account for 1337-speak and _ as space and to speed up the exfiltrati
 _ A B C D E F G H I J K L M N O P Q R S T U V W X Y Z 0 1 3 4 5 7 a b c d e f g h i j k l m n o p q r s t u v w x y z . - 2 6 8 9 { }
 
 I wrapped this up in some very ugly bash code + netcat and measured the time for each run and exfiltrating the flag very slowly.
-Only afterwards I noticed I could've used divide-and-conquer (pasting a lot more lines at once) to speed this up reasonably and should've done the used the crash-condition the other way around.
+The server only allows one connection at a time, so running multiple instances of the code couldn't work. Only afterwards I noticed I could've used divide-and-conquer (pasting a lot more lines at once) to speed this up reasonably and should've done the used the crash-condition the other way around.
 However, I managed to get the Flag about 10 minutes before the CTF was shut down. :)
 
 ### FLAG
