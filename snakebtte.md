@@ -1,6 +1,6 @@
 ## snakebtte
 
-This challange was only worth 100 points, but IMHO a lot harder than others as it required some coding - it was also partly broken; the intended solution didn't work. My guess is that python should've returned output here.
+This challange was only worth 100 points, but IMHO harder than others as it required some coding - it was also partly broken; the intended solution didn't work. My guess is that python should've returned output here.
 
 nmap 10.10.0.229 -- port 9999/TCP is open
 
@@ -40,34 +40,43 @@ c3lzLnZlcnNpb25bMF09PSczJyBhbmQgdGltZS5zbGVlcCg1KQo=
 
 The shell indeed paused for 5 seconds, so it's python3.
 
-I guessed the path of the FLAG.TXT correctly (trying to open a nonexistent file will cause the shell to terminate).
+I guessed the path of the FLAG.TXT correctly - trying to open a nonexistent file will cause the shell to terminate.
 
-It was impossible to do data exfiltration through os.system(), as the system could not reach the outside.
-
-Thus a time-based method was used (base64-encode each line and send it to the server):
+To verify this, I checked the start of the file - we already know that flags are in the form DORF18{...}.
+0 is the position in the file we're trying to brute-force, D is the character to test for.
+This verified that FLAG.TXT is the correct file as it sleeps for 10 seconds:
 
 ```
 import os
 import time
 f = open('FLAG.TXT', 'r')
 data = f.read()
-"(data)[0]=='D' and crash
-dummy
+"(data)[0]=='D' and time.sleep(5)
+"(data)[1]=='O' and time.sleep(5)
+```
+
+It was impossible to do data exfiltration through os.system(), as the system could not reach the outside.
+Thus a time-based method can be used (base64-encode each line individually and send it to the server):
+
+```
+import os
+import time
+f = open('FLAG.TXT', 'r')
+data = f.read()
+"(data)[$1]=='$2' and crash
+time.sleep(2)
 dummy
 exit==
 ```
 
-0 is the position in the file we're trying to brute-force, D is the character - we already know that flags are in the form DORF18{...}
-This verified that FLAG.TXT is the correct file.
+Our goal is to compare each byte of FLAG.TXT to a charset and measure how long the query took.
+The "dummy" line makes the program return the text from the beginning and is used to verify that there was no disconnect or other problem.
 
-Our goal is to compare each byte of the FLAG.TXT file to a charset, from previous flags I choose the following, in order to account for 1337-speak and _ instead of space in order to speed up the exfiltration of the flag:
-
+In order to account for 1337-speak and _ as space and to speed up the exfiltration of the flag, the following was used:
 _ A B C D E F G H I J K L M N O P Q R S T U V W X Y Z 0 1 3 4 5 7 a b c d e f g h i j k l m n o p q r s t u v w x y z . - 2 6 8 9 { }
 
-The "dummy" line makes the program return the text from the beginning and is used to verify that there was indeed no disconnect.
-
-I wrapped this up in some very ugly bash code + netcat and measured the time for each run, exfiltrating the flag within ~1.5 hours.
-This was very slow, and only afterwards I noticed I could've used divide-and-conquer (pasting a lot more lines at once) to speed this up reasonably.
+I wrapped this up in some very ugly bash code + netcat and measured the time for each run, exfiltrating the flag very slowly.
+Only afterwards I noticed I could've used divide-and-conquer (pasting a lot more lines at once) to speed this up reasonably.
 However, I managed to get the Flag about 10 minutes before the CTF was shut down. :)
 
 ### FLAG
